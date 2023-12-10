@@ -23,18 +23,18 @@ const httpParser = bodyParser.urlencoded({extended:false});
 //   res.status(200).send('success');
 // });
 
-// app.post('/sample',jsonParser,async(_,res)=>{
-//   // const {token} = await FirebaseService.getToken("0000001");
-//   expo.sendPushNotificationsAsync([
-//     {
-//       to:'ExponentPushToken[-Ji6d1F69jCS1l4qGHB3Zw]',
-//       title:"Soil Water level",
-//       body:'water your plan'
-//     },
-//   ])
+app.post('/push',jsonParser,async(_,res)=>{
+  // const {token} = await FirebaseService.getToken("0000001");
+  expo.sendPushNotificationsAsync([
+    {
+      to:'ExponentPushToken[-Ji6d1F69jCS1l4qGHB3Zw]',
+      title:"Soil Water level",
+      body:'water your plan'
+    },
+  ])
 
-//   return res.status(200).send("success");
-// })
+  return res.status(200).send("success");
+})
 app.get('/sample',async(_,res)=>{
   // const {token} = await FirebaseService.getToken("0000001");
  
