@@ -2,8 +2,8 @@ import express from "express";
 
 import bodyParser from "body-parser";
 
-import * as FirebaseService from "./FirebaseService";
-import Expo from "expo-server-sdk";
+// import * as FirebaseService from "./FirebaseService";
+import {Expo} from "expo-server-sdk";
 
 const app = express();
 const port = 8000;
