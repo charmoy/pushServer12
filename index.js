@@ -33,7 +33,7 @@ app.post('/push',jsonParser,async(_,res)=>{
     },
   ])
 
-  return res.status(200).send("success");
+  return res.status(200).send("successful push");
 })
 app.get('/sample',async(_,res)=>{
   // const {token} = await FirebaseService.getToken("0000001");
