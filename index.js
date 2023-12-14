@@ -37,7 +37,7 @@ app.post('/warning',jsonParser,async(_,res)=>{
 })
 
 app.post('/open',jsonParser,async(_,res)=>{
-  // const {token} = await FirebaseService.getToken("0000001");
+  
   expo.sendPushNotificationsAsync([
     {
       to:'ExponentPushToken[-Ji6d1F69jCS1l4qGHB3Zw]',
@@ -50,7 +50,7 @@ app.post('/open',jsonParser,async(_,res)=>{
 })
 
 app.post('/close',jsonParser,async(_,res)=>{
-  // const {token} = await FirebaseService.getToken("0000001");
+  
   expo.sendPushNotificationsAsync([
     {
       to:'ExponentPushToken[-Ji6d1F69jCS1l4qGHB3Zw]',
