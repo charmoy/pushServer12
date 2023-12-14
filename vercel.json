@@ -1,9 +1,7 @@
 {
     "version": 2,
     "name": "pushserver",
-    "regions": ["sin1"],
-    
-  "functionFailoverRegions": ["hkg1", "hnd1","icn1"],
+
     "builds": [
        { "src": "index.js", "use": "@vercel/node" }
     ],
