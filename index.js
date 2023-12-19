@@ -39,13 +39,12 @@ function convertVideo(obj,idx,res){
         preset: 'Very Fast 1080p30',
        
       }
-      hbjs.exec(options,function(err,stdout,stderr){
-          if(err) throw err;
-          console.log(stdout);
-          console.log( "/tmp/"+obj.fullPath+".mp4");
-          // res.json({
-          //     path:output,
-          // })
+    
+     const result = await hbjs.run(options)
+      console.log("/tmp/"+obj.fullPath+".mp4")
+      console.log('line45',result)
+}
+  
       
 })}
 
@@ -101,10 +100,11 @@ app.post('/',async(req,res)=>{
       let idx =i;
       let name = data[i].fullPath;
       try{
-       await getVideo(obj).then(()=>{
-         convertVideo(obj,idx,res)
+        await getVideo(obj)
+       
+         await convertVideo(obj,idx,res)
         
-       });
+       
        
         await uploadVideo(urls,name);
   
