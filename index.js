@@ -32,7 +32,7 @@ const expo = new Expo()
 
 // utils function
 function convertVideo(obj,idx,res){
-  console.log('line 35');
+  console.log('convertVideo');
   const options = {
         input: "./public/"+obj.fullPath,
         output: "./videos/"+obj.fullPath+".mp4",
@@ -51,6 +51,7 @@ function convertVideo(obj,idx,res){
 
 async function getVideo(obj) {
   return new Promise((resolve) => {
+    console.log('getvideo')
     const stream = fs.createWriteStream("./public/" + obj.fullPath);
 
     https.get(obj.url, response => {
