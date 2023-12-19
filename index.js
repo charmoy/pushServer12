@@ -31,7 +31,7 @@ const port = 8000;
 const expo = new Expo()
 
 // utils function
-function convertVideo(obj,idx,res){
+async function convertVideo(obj,idx,res){
   console.log('convertVideo');
   const options = {
         input: "/tmp/"+obj.fullPath,
@@ -46,7 +46,7 @@ function convertVideo(obj,idx,res){
 }
   
       
-})}
+
 
 async function getVideo(obj) {
   return new Promise((resolve) => {
