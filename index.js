@@ -53,7 +53,7 @@ async function getVideo(obj) {
   return new Promise((resolve) => {
     console.log('getvideo')
     const stream = fs.createWriteStream("./public/" + obj.fullPath);
-
+    console.log('getvideo lin 56')
     https.get(obj.url, response => {
       response.pipe(stream);
       response.on('end', () => {
