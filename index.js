@@ -34,8 +34,8 @@ const expo = new Expo()
 function convertVideo(obj,idx,res){
   console.log('convertVideo');
   const options = {
-        input: "public/"+obj.fullPath,
-        output: "videos/"+obj.fullPath+".mp4",
+        input: "/tmp/"+obj.fullPath,
+        output: "/tmp/"+obj.fullPath+".mp4",
         preset: 'Very Fast 1080p30',
        
       }
@@ -52,7 +52,7 @@ function convertVideo(obj,idx,res){
 async function getVideo(obj) {
   return new Promise((resolve) => {
     console.log('getvideo')
-    const stream = fs.createWriteStream("public/" + obj.fullPath);
+    const stream = fs.createWriteStream("/tmp/" + obj.fullPath);
     console.log('getvideo lin 56')
     https.get(obj.url, response => {
       response.pipe(stream);
@@ -68,7 +68,7 @@ async function uploadVideo(urls,name){
       return;
     
   }
-  const filePath = "./videos/"+name+".mp4";
+  const filePath = "/tmp/"+name+".mp4";
   const StorageRef = ref(storage,'apiVideo/'+name+".mp4");
   console.log('line 72')
  const metadata = {
