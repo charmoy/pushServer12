@@ -1,30 +1,129 @@
 import express from "express";
-
-import bodyParser from "body-parser";
-
-// import * as FirebaseService from "./FirebaseService";
 import {Expo} from "expo-server-sdk";
+import https from 'https'
+import fs from 'fs'
+import cors from 'cors'
+import hbjs from 'handbrake-js'
+import * as firebase from 'firebase/app'
+import {getStorage,ref,uploadBytes,getDownloadURL,uploadBytesResumable} from 'firebase/storage'
 
+
+
+//firebase configuration
+const firebaseConfig={
+  apiKey: "AIzaSyByPUXoGGFnf-IAWh_Rh0EzTDUJc4qWxbE",
+  authDomain: "todoapp-a09ac.firebaseapp.com",
+  projectId: "todoapp-a09ac",
+  storageBucket: "todoapp-a09ac.appspot.com",
+  messagingSenderId: "46672997342",
+  appId: "1:46672997342:web:4c09cb254904222a538b4f",
+  measurementId: "G-9CPMY34QP4"
+}
+firebase.initializeApp(firebaseConfig);
+const storage = getStorage();
+
+/////////////////////////
 const app = express();
-const port = 8000;
 
+app.use(cors());
+app.use(express.json());
+const port = 8000;
 const expo = new Expo()
 
-const jsonParser = bodyParser.json();
-const httpParser = bodyParser.urlencoded({extended:false});
+// utils function
+function convertVideo(obj,idx,res){
+  console.log('line 35');
+  const options = {
+        input: "./public/"+obj.fullPath,
+        output: "./videos/"+obj.fullPath+".mp4",
+        preset: 'Very Fast 1080p30',
+       
+      }
+      hbjs.exec(options,function(err,stdout,stderr){
+          if(err) throw err;
+          console.log(stdout);
+        
+          // res.json({
+          //     path:output,
+          // })
+      
+})}
 
-// app.post("/registerPushToken",jsonParser,async(req,res)=>{
-//   const userId = String(req.body.userId);
-//   console.log('LINE 15 '+JSON.stringify(req.body));
-//   const token = String(req.body.token);
-//   console.log('LINE 17 '+token)
+async function getVideo(obj) {
+  return new Promise((resolve) => {
+    const stream = fs.createWriteStream("./public/" + obj.fullPath);
 
-//   await FirebaseService.saveToken(userId,token);
-//   res.status(200).send('success');
-// });
+    https.get(obj.url, response => {
+      response.pipe(stream);
+      response.on('end', () => {
+        resolve(stream);
+      });
+    });
+  });
+}
+async function uploadVideo(urls,name){
+  if(!urls){
+      console.log("no file uploaded");
+      return;
+    
+  }
+  const filePath = "./videos/"+name+".mp4";
+  const StorageRef = ref(storage,'apiVideo/'+name+".mp4");
+  console.log('line 72')
+ const metadata = {
+  contentType:'video/mp4',
+ }
+ console.log('line 76')
+ 
+ const data = fs.readFileSync(filePath)
+   await uploadBytesResumable(StorageRef,data,metadata)
+    console.log('line 78')
+    try {
+      const url = await getDownloadURL(StorageRef)
+    
+      urls.push({url:url,name:name});
+      
+    } catch (error) {
+      console.log(error)
+    }  
+}
 
-app.post('/warning',jsonParser,async(_,res)=>{
-  // const {token} = await FirebaseService.getToken("0000001");
+
+
+app.post('/',async(req,res)=>{
+  const urls=[];
+  const data = req.body;
+  console.log('line 137'+ data);
+
+    for(let i = 0;i<data.length;i++){
+      let obj = data[i];
+      let idx =i;
+      let name = data[i].fullPath;
+      try{
+       await getVideo(obj).then(()=>{
+         convertVideo(obj,idx,res)
+        
+       });
+       
+        await uploadVideo(urls,name);
+  
+      }catch{
+        console.log('error')
+      } 
+
+    }
+
+    
+  
+return res.status(200).send({urls:urls});
+
+})
+
+ 
+
+
+app.post('/warning',async(_,res)=>{
+ 
   expo.sendPushNotificationsAsync([
     {
       to:'ExponentPushToken[-Ji6d1F69jCS1l4qGHB3Zw]',
@@ -36,8 +135,8 @@ app.post('/warning',jsonParser,async(_,res)=>{
   return res.status(200).send("successful push");
 })
 
-app.post('/open',jsonParser,async(_,res)=>{
-  
+app.post('/open',async(_,res)=>{
+
   expo.sendPushNotificationsAsync([
     {
       to:'ExponentPushToken[-Ji6d1F69jCS1l4qGHB3Zw]',
@@ -49,8 +148,8 @@ app.post('/open',jsonParser,async(_,res)=>{
   return res.status(200).send("successful push");
 })
 
-app.post('/close',jsonParser,async(_,res)=>{
-  
+app.post('/close',async(_,res)=>{
+
   expo.sendPushNotificationsAsync([
     {
       to:'ExponentPushToken[-Ji6d1F69jCS1l4qGHB3Zw]',
