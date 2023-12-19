@@ -108,9 +108,9 @@ app.post('/',async(req,res)=>{
        
         await uploadVideo(urls,name);
   
-      }catch{
-        console.log('error')
-      } 
+      } catch (error) {
+      console.log(error)
+    }  
 
     }
 
