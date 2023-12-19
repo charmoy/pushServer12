@@ -42,7 +42,7 @@ function convertVideo(obj,idx,res){
       hbjs.exec(options,function(err,stdout,stderr){
           if(err) throw err;
           console.log(stdout);
-        
+          console.log( "/tmp/"+obj.fullPath+".mp4");
           // res.json({
           //     path:output,
           // })
